@@ -35,3 +35,21 @@ sudo add-apt-repository \
  sudo apt-get update
  sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
+
+### Make sure your user has the right permissions
+Try to list the current containers
+```
+docker ps -a
+```
+
+If you get an error (permission denied), you need to add your user to the docker group
+
+```
+sudo usermod -aG docker ${USER}
+```
+
+Log out and log back it to refresh group membership
+```
+su - ${USER}
+```
+Re-run the first command to check that the error disappeared.
