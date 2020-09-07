@@ -1,17 +1,42 @@
 FROM debian:buster-slim
+LABEL maintainer="Thomas Carlier <carlier.thomas@gmail.com"
 
-LABEL maintainer="Thomas Carlier <carlier.thomas@gmail.com>"
+RUN useradd --system asterisk
 
-ENV ASTERISK_VERSION asterisk-17-current
+RUN apt-get update -qq && \
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y --no-install-recommends \
+            autoconf \
+            binutils-dev \
+            build-essential \
+            ca-certificates \
+            curl \
+            libcurl4-openssl-dev \
+            libedit-dev \
+            libgsm1-dev \
+            libjansson-dev \
+            libogg-dev \
+            libpopt-dev \
+            libresample1-dev \
+            libspandsp-dev \
+            libspeex-dev \
+            libspeexdsp-dev \
+            libsqlite3-dev \
+            libsrtp2-dev \
+            libssl-dev \
+            libvorbis-dev \
+            libxml2-dev \
+            libxslt1-dev \
+            portaudio19-dev \
+            uuid \
+            uuid-dev \
+            vim \
+            xmlstarlet \
+            && \
+    apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/*
 
-COPY build-asterisk.sh /
-RUN  chmod 755 /build-asterisk.sh
-RUN /build-asterisk.sh
-
-EXPOSE 5060/udp 5060/tcp
-VOLUME /var/lib/asterisk/sounds /var/lib/asterisk/keys /var/lib/asterisk/phoneprov /var/spool/asterisk /var/log/asterisk
-
-COPY docker-entrypoint.sh /
-RUN  chmod 755 /docker-entrypoint.sh
-#ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["/usr/sbin/asterisk", "-vvvdddf", "-T", "-W", "-U", "asterisk", "-p"]
+ENV ASTERISK_VERSION=17.4.0
+COPY build-asterisk.sh /build-asterisk
+RUN /build-asterisk && rm -f /build-asterisk
+COPY conf/ /etc/asterisk/
+CMD ["/usr/sbin/asterisk", "-f"]
