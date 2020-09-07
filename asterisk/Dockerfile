@@ -1,5 +1,5 @@
 FROM debian:buster-slim
-LABEL maintainer="Thomas Carlier <carlier.thomas@gmail.com"
+LABEL maintainer="Thomas Carlier <carlier.thomas@gmail.com>"
 
 RUN useradd --system asterisk
 
