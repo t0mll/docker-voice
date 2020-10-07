@@ -1,5 +1,8 @@
 # Asterisk
 ## Build
+
+_Watch for line endings in .sh files, should be set to LF_
+
 ```
 docker build -t docker-voice/asterisk .
 ```

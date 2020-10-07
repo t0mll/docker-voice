@@ -36,7 +36,8 @@ RUN apt-get update -qq && \
     apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/*
 
 ENV ASTERISK_VERSION=17.4.0
-COPY build-asterisk.sh /build-asterisk
-RUN /build-asterisk && rm -f /build-asterisk
+ADD /build-asterisk.sh /src/
+RUN echo $(ls -a1 /src)
+RUN /src/build-asterisk.sh && rm -f /src/build-asterisk.sh
 COPY conf/ /etc/asterisk/
 CMD ["/usr/sbin/asterisk", "-f"]
