@@ -37,7 +37,7 @@ RUN apt-get update -qq && \
 
 ENV ASTERISK_VERSION=17.4.0
 ADD /build-asterisk.sh /src/
-RUN echo $(ls -a1 /src)
 RUN /src/build-asterisk.sh && rm -f /src/build-asterisk.sh
-COPY conf/ /etc/asterisk/
-CMD ["/usr/sbin/asterisk", "-f"]
+COPY /conf/ /etc/asterisk/
+EXPOSE 5060/udp 5060/tcp 8088/tcp 5038/tcp
+CMD ["/usr/sbin/asterisk", "-cvvvvv"]
